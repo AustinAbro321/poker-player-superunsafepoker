@@ -36,7 +36,7 @@ class PlayerService(http.server.BaseHTTPRequestHandler):
         else:
             game_state = {}
 
-        print('Unsafe Poker: ' + game_state)
+        print('Unsafe Poker: ', game_state)
 
         response = b''
         if action == 'bet_request':
