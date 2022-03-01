@@ -7,6 +7,7 @@ from player import Player
 class Tests(unittest.TestCase):
 
     def test_player(self):
+        name = 'sUpERUnSAFePoKeR'
         game_state = json.loads('''
         {
   "tournament_id": "550d1d68cd7bd10003000003",
@@ -72,7 +73,7 @@ class Tests(unittest.TestCase):
   ]
 }
   ''')
-
+        game_state[payers][]
         result = Player().betRequest(game_state=game_state)
         assert result == 320-80
 
