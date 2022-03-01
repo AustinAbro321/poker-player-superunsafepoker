@@ -1,6 +1,6 @@
 
 class Player:
-    VERSION = "Default Python folding player"
+    VERSION = "UNSAFe v1"
 
     def betRequest(self, game_state):
         current_buy_in = game_state["current_buy_in"]
