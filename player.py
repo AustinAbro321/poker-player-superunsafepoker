@@ -3,8 +3,8 @@ class Player:
     VERSION = "UNSAFe v1"
 
     def betRequest(self, game_state):
-        return 0
-        current_buy_in = game_state["current_buy_in"]
+
+        current_buy_in = game_state.get("current_buy_in",100)
         players = game_state["players"]
         in_action = game_state["in_action"]
 
