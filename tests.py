@@ -9,10 +9,10 @@ from player import Player
 def is_pair(cards):
     ranks = [c["rank"] for c in cards]
     print (ranks)
-    for rank in ranks:
-        if rank in ranks:
-            return True
-    return False
+    count = 0
+    return any(ranks.count(element) > 1 for element in ranks)
+
+
 
 
 class Tests(unittest.TestCase):
