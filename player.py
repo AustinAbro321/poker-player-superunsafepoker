@@ -1,3 +1,6 @@
+import sys
+
+
 class Player:
     VERSION = "UNSAFe v1"
 
@@ -8,7 +11,7 @@ class Player:
             in_action = game_state["in_action"]
             return current_buy_in - players[in_action]["bet"]
         except:
-            print("exception", game_state )
+            print("************************exception**********", game_state,  file=sys.stderr)
             return 0
 
     def showdown(self, game_state):
