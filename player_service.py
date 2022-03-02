@@ -1,4 +1,3 @@
-import pprint
 import time
 import cgi
 import json
@@ -37,7 +36,6 @@ class PlayerService(http.server.BaseHTTPRequestHandler):
         else:
             game_state = {}
 
-        pprint.pprint(game_state)
 
         response = b''
         if action == 'bet_request':
