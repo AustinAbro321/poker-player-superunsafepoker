@@ -81,7 +81,7 @@ class Tests(unittest.TestCase):
     def test_player(self):
         # game_state[payers][]
         result = Player().betRequest(game_state=self.game_state)
-        self.assertEqual(result,320 - 80 + 10)
+        self.assertEqual(result,320 - 80 + 20)
 
     def test_check_pair(self):
         result = is_pair(cards=[{

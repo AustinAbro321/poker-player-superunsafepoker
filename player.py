@@ -11,7 +11,8 @@ class Player:
             in_action = game_state["in_action"]
             hole_cards = players[in_action]["hole_cards"]
             community_cards = game_state["community_cards"] or []
-            bet_adjustment = 10 if is_pair(hole_cards + community_cards) else 0
+            big_blind = game_state["small_blind"] * 2
+            bet_adjustment = big_blind if is_pair(hole_cards + community_cards) else 0
             return current_buy_in - players[in_action]["bet"] + bet_adjustment
         except Exception as e:
             print(e, file=sys.stderr)
