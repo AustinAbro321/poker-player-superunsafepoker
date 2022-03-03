@@ -1,7 +1,28 @@
 import json
 import unittest
 
-from player import Player, is_pair, is_three_of_a_kind, get_hand_strength, is_four_of_a_kind
+from player import Player, is_pair, is_three_of_a_kind, get_hand_strength, is_four_of_a_kind, is_flush
+
+FLUSH_HAND =[{
+            "rank": "A",
+            "suit": "hearts"
+        },
+        {
+            "rank": "9",
+            "suit": "hearts"
+        },
+        {
+            "rank": "7",
+            "suit": "hearts"
+        },
+        {
+            "rank": "2",
+            "suit": "hearts"
+        },
+        {
+            "rank": "1",
+            "suit": "hearts"
+        }]
 
 FOUR_OF_A_KIND_HAND =[{
             "rank": "A",
@@ -149,6 +170,10 @@ class Tests(unittest.TestCase):
 
     def test_is_four_of_a_kind(self):
         result = is_four_of_a_kind(FOUR_OF_A_KIND_HAND)
+        self.assertTrue(result)
+
+    def test_is_flush(self):
+        result = is_flush(FLUSH_HAND)
         self.assertTrue(result)
 
 if __name__ == "__main__":

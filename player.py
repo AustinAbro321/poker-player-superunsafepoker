@@ -28,6 +28,8 @@ class Player:
 def get_hand_strength(hand):
     if is_four_of_a_kind(hand):
         return 10000
+    elif is_flush(hand):
+        return 100
     elif is_three_of_a_kind(hand):
         return 10
     elif is_pair(hand):
@@ -47,3 +49,7 @@ def is_three_of_a_kind(cards):
 def is_four_of_a_kind(cards):
     ranks = [c["rank"] for c in cards]
     return any(ranks.count(element) > 3 for element in ranks)
+
+def is_flush(cards):
+    ranks = [c["suit"] for c in cards]
+    return any(ranks.count(element) >= 5 for element in ranks)
