@@ -13,12 +13,9 @@ class Player:
             community_cards = game_state["community_cards"] or []
             big_blind = game_state["small_blind"] * 2
             hand = hole_cards + community_cards
-            if is_three_of_a_kind(hand):
-                bet_adjustment = big_blind * 2
-            elif is_pair(hand):
-                bet_adjustment = big_blind
-            else:
-                bet_adjustment = 0
+
+            bet_adjustment = get_hand_strength(hand) * big_blind
+            
             return current_buy_in - players[in_action]["bet"] + bet_adjustment
         except Exception as e:
             print(e, file=sys.stderr)
@@ -27,6 +24,14 @@ class Player:
     def showdown(self, game_state):
         pass
 
+
+def get_hand_strength(hand):
+    if is_three_of_a_kind(hand):
+        return 2
+    elif is_pair(hand):
+        return 1
+    else:
+        return 0
 
 def is_pair(cards):
     ranks = [c["rank"] for c in cards]

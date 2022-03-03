@@ -1,8 +1,38 @@
 import json
 import unittest
 
-from player import Player, is_pair, is_three_of_a_kind
+from player import Player, is_pair, is_three_of_a_kind, get_hand_strength
 
+THREE_OF_A_KIND_HAND =[{
+            "rank": "A",
+            "suit": "spades"
+        },
+        {
+            "rank": "A",
+            "suit": "hearts"
+        },
+        {
+            "rank": "A",
+            "suit": "hearts"
+        }]
+
+TWO_OF_A_KIND_HAND = [{
+            "rank": "4",
+            "suit": "spades"
+        },
+            {
+                "rank": "4",
+                "suit": "hearts"
+            }]
+
+GARBAGE_HAND = [{
+            "rank": "4",
+            "suit": "spades"
+        },
+        {
+            "rank": "A",
+            "suit": "hearts"
+        }]
 
 class Tests(unittest.TestCase):
     game_state = json.loads('''
@@ -72,58 +102,37 @@ class Tests(unittest.TestCase):
       ''')
 
     def test_player(self):
-        # game_state[payers][]
         result = Player().betRequest(game_state=self.game_state)
         self.assertEqual(result,320 - 80 + 20)
 
+
     def test_check_pair(self):
-        result = is_pair(cards=[{
-            "rank": "4",
-            "suit": "spades"
-        },
-            {
-                "rank": "4",
-                "suit": "hearts"
-            }])
+        result = is_pair(TWO_OF_A_KIND_HAND)
         self.assertTrue(result)
 
     def test_is_not_three_of_a_kind(self):
-        result = is_three_of_a_kind(cards=[{
-            "rank": "4",
-            "suit": "spades"
-        },
-            {
-                "rank": "4",
-                "suit": "hearts"
-            }])
+        result = is_three_of_a_kind(TWO_OF_A_KIND_HAND)
         self.assertFalse(result)
 
     def test_is_three_of_a_kind(self):
-        result = is_three_of_a_kind(cards=[{
-            "rank": "4",
-            "suit": "spades"
-        },
-            {
-                "rank": "4",
-                "suit": "hearts"
-            },
-            {
-                "rank": "4",
-                "suit": "hearts"
-            }
-        ])
+        result = is_three_of_a_kind(THREE_OF_A_KIND_HAND)
         self.assertTrue(result)
 
     def test_check_not_pair(self):
-        result = is_pair(cards=[{
-            "rank": "4",
-            "suit": "spades"
-        },
-        {
-            "rank": "A",
-            "suit": "hearts"
-        }])
+        result = is_pair(GARBAGE_HAND)
         self.assertFalse(result)
+
+    def test_rank_hand_nothing(self):
+        result = get_hand_strength(GARBAGE_HAND)
+        self.assertEqual(result, 0)
+
+    def test_rank_hand_pair(self):
+        result = get_hand_strength(TWO_OF_A_KIND_HAND)
+        self.assertEqual(result, 1)
+
+    def test_rank_hand_three_of_a_kind(self):
+        result = get_hand_strength(THREE_OF_A_KIND_HAND)
+        self.assertEqual(result, 2)
 
 if __name__ == "__main__":
     unittest.main()
