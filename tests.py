@@ -1,14 +1,7 @@
 import json
 import unittest
 
-from player import Player, is_pair
-
-
-# jstylson
-
-
-
-
+from player import Player, is_pair, is_three_of_a_kind
 
 
 class Tests(unittest.TestCase):
@@ -92,6 +85,33 @@ class Tests(unittest.TestCase):
                 "rank": "4",
                 "suit": "hearts"
             }])
+        self.assertTrue(result)
+
+    def test_is_not_three_of_a_kind(self):
+        result = is_three_of_a_kind(cards=[{
+            "rank": "4",
+            "suit": "spades"
+        },
+            {
+                "rank": "4",
+                "suit": "hearts"
+            }])
+        self.assertFalse(result)
+
+    def test_is_three_of_a_kind(self):
+        result = is_three_of_a_kind(cards=[{
+            "rank": "4",
+            "suit": "spades"
+        },
+            {
+                "rank": "4",
+                "suit": "hearts"
+            },
+            {
+                "rank": "4",
+                "suit": "hearts"
+            }
+        ])
         self.assertTrue(result)
 
     def test_check_not_pair(self):

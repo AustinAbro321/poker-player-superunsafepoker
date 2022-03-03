@@ -12,7 +12,13 @@ class Player:
             hole_cards = players[in_action]["hole_cards"]
             community_cards = game_state["community_cards"] or []
             big_blind = game_state["small_blind"] * 2
-            bet_adjustment = big_blind if is_pair(hole_cards + community_cards) else 0
+            hand = hole_cards + community_cards
+            if is_three_of_a_kind(hand):
+                bet_adjustment = big_blind * 2
+            if is_pair(hand):
+                bet_adjustment = big_blind
+            else:
+                bet_adjustment = 0
             return current_buy_in - players[in_action]["bet"] + bet_adjustment
         except Exception as e:
             print(e, file=sys.stderr)
@@ -27,3 +33,9 @@ def is_pair(cards):
     print(ranks)
     count = 0
     return any(ranks.count(element) > 1 for element in ranks)
+
+def is_three_of_a_kind(cards):
+    ranks = [c["rank"] for c in cards]
+    print(ranks)
+    count = 0
+    return any(ranks.count(element) > 2 for element in ranks)
