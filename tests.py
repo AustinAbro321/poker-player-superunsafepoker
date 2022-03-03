@@ -1,16 +1,12 @@
 import json
 import unittest
 
-from player import Player
+from player import Player, is_pair
 
 
 # jstylson
 
-def is_pair(cards):
-    ranks = [c["rank"] for c in cards]
-    print (ranks)
-    count = 0
-    return any(ranks.count(element) > 1 for element in ranks)
+
 
 
 
@@ -85,7 +81,7 @@ class Tests(unittest.TestCase):
     def test_player(self):
         # game_state[payers][]
         result = Player().betRequest(game_state=self.game_state)
-        assert result == 320 - 80
+        self.assertEqual(result,320 - 80 + 10)
 
     def test_check_pair(self):
         result = is_pair(cards=[{
