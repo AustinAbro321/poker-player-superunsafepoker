@@ -15,7 +15,7 @@ class Player:
             hand = hole_cards + community_cards
 
             bet_adjustment = get_hand_strength(hand) * big_blind
-            
+
             return current_buy_in - players[in_action]["bet"] + bet_adjustment
         except Exception as e:
             print(e, file=sys.stderr)
@@ -26,8 +26,10 @@ class Player:
 
 
 def get_hand_strength(hand):
-    if is_three_of_a_kind(hand):
-        return 2
+    if is_four_of_a_kind(hand):
+        return 10000
+    elif is_three_of_a_kind(hand):
+        return 10
     elif is_pair(hand):
         return 1
     else:
@@ -35,12 +37,13 @@ def get_hand_strength(hand):
 
 def is_pair(cards):
     ranks = [c["rank"] for c in cards]
-    print(ranks)
-    count = 0
     return any(ranks.count(element) > 1 for element in ranks)
 
 def is_three_of_a_kind(cards):
     ranks = [c["rank"] for c in cards]
-    print(ranks)
-    count = 0
     return any(ranks.count(element) > 2 for element in ranks)
+
+
+def is_four_of_a_kind(cards):
+    ranks = [c["rank"] for c in cards]
+    return any(ranks.count(element) > 3 for element in ranks)
