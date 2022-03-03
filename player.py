@@ -15,7 +15,7 @@ class Player:
             hand = hole_cards + community_cards
             if is_three_of_a_kind(hand):
                 bet_adjustment = big_blind * 2
-            if is_pair(hand):
+            elif is_pair(hand):
                 bet_adjustment = big_blind
             else:
                 bet_adjustment = 0
