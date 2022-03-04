@@ -141,6 +141,10 @@ class Tests(unittest.TestCase):
 
     def test_player(self):
         result = Player().betRequest(game_state=self.game_state)
+        self.assertEqual(result,240)
+
+        self.game_state["round"] = 1
+        result = Player().betRequest(game_state=self.game_state)
         self.assertEqual(result,241)
 
 

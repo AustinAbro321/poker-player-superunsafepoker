@@ -13,7 +13,9 @@ class Player:
             community_cards = game_state["community_cards"] or []
             hand = hole_cards + community_cards
             current_call_amount = current_buy_in - players[in_action]["bet"]
-
+            curr_round = game_state["round"]
+            if curr_round == 0:
+                return current_call_amount
             return get_bet_amount(hand, current_call_amount)
         except Exception as e:
             print(e, file=sys.stderr)
