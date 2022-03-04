@@ -33,6 +33,8 @@ def get_bet_amount(hand, current_call_amount):
         result += 100
     elif is_three_of_a_kind(hand):
         result += 10
+    elif is_two_pair(hand):
+        result += 5
     elif is_pair(hand):
         result += 1
     else:
@@ -46,6 +48,15 @@ def is_pair(cards):
 def is_three_of_a_kind(cards):
     ranks = [c["rank"] for c in cards]
     return any(ranks.count(element) > 2 for element in ranks)
+
+def is_two_pair(cards):
+    ranks = [c["rank"] for c in cards]
+    set_of_ranks = list(set(ranks))
+    counts = { i : 0 for i in set(set_of_ranks) }
+    for r in set_of_ranks:
+        counts[r] = ranks.count(r)
+    return list(counts.values()).count(2) == 2
+
 
 
 def is_four_of_a_kind(cards):

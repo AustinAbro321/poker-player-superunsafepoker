@@ -1,76 +1,99 @@
 import json
 import unittest
 
-from player import Player, is_pair, is_three_of_a_kind, get_bet_amount, is_four_of_a_kind, is_flush
+from player import Player, is_pair, is_three_of_a_kind, get_bet_amount, is_four_of_a_kind, is_flush, is_two_pair
 
-FLUSH_HAND =[{
-            "rank": "A",
-            "suit": "hearts"
-        },
-        {
-            "rank": "9",
-            "suit": "hearts"
-        },
-        {
-            "rank": "7",
-            "suit": "hearts"
-        },
-        {
-            "rank": "2",
-            "suit": "hearts"
-        },
-        {
-            "rank": "1",
-            "suit": "hearts"
-        }]
+TWO_PAIR_HAND = [
+    {
+        "rank": "A",
+        "suit": "hearts"
+    },
+    {
+        "rank": "A",
+        "suit": "hearts"
+    },
+    {
+        "rank": "8",
+        "suit": "hearts"
+    },
+    {
+        "rank": "8",
+        "suit": "hearts"
+    },
+    {
+        "rank": "1",
+        "suit": "hearts"
+    }]
 
-FOUR_OF_A_KIND_HAND =[{
-            "rank": "A",
-            "suit": "spades"
-        },
-        {
-            "rank": "A",
-            "suit": "hearts"
-        },
-        {
-            "rank": "A",
-            "suit": "hearts"
-        },
-        {
-            "rank": "A",
-            "suit": "hearts"
-        }]
+FLUSH_HAND = [{
+    "rank": "A",
+    "suit": "hearts"
+},
+    {
+        "rank": "9",
+        "suit": "hearts"
+    },
+    {
+        "rank": "7",
+        "suit": "hearts"
+    },
+    {
+        "rank": "2",
+        "suit": "hearts"
+    },
+    {
+        "rank": "1",
+        "suit": "hearts"
+    }]
 
-THREE_OF_A_KIND_HAND =[{
-            "rank": "A",
-            "suit": "spades"
-        },
-        {
-            "rank": "A",
-            "suit": "hearts"
-        },
-        {
-            "rank": "A",
-            "suit": "hearts"
-        }]
+FOUR_OF_A_KIND_HAND = [{
+    "rank": "A",
+    "suit": "spades"
+},
+    {
+        "rank": "A",
+        "suit": "hearts"
+    },
+    {
+        "rank": "A",
+        "suit": "hearts"
+    },
+    {
+        "rank": "A",
+        "suit": "hearts"
+    }]
+
+THREE_OF_A_KIND_HAND = [{
+    "rank": "A",
+    "suit": "spades"
+},
+    {
+        "rank": "A",
+        "suit": "hearts"
+    },
+    {
+        "rank": "A",
+        "suit": "hearts"
+    }]
 
 TWO_OF_A_KIND_HAND = [{
-            "rank": "4",
-            "suit": "spades"
-        },
-            {
-                "rank": "4",
-                "suit": "hearts"
-            }]
+    "rank": "4",
+    "suit": "spades"
+},
+    {
+        "rank": "4",
+        "suit": "hearts"
+    }]
 
 GARBAGE_HAND = [{
-            "rank": "4",
-            "suit": "spades"
-        },
-        {
-            "rank": "A",
-            "suit": "hearts"
-        }]
+    "rank": "4",
+    "suit": "spades"
+},
+    {
+        "rank": "A",
+        "suit": "hearts"
+    }]
+
 
 class Tests(unittest.TestCase):
     game_state = json.loads('''
@@ -141,12 +164,11 @@ class Tests(unittest.TestCase):
 
     def test_player(self):
         result = Player().betRequest(game_state=self.game_state)
-        self.assertEqual(result,240)
+        self.assertEqual(result, 240)
 
         self.game_state["round"] = 1
         result = Player().betRequest(game_state=self.game_state)
-        self.assertEqual(result,241)
-
+        self.assertEqual(result, 241)
 
     def test_check_pair(self):
         result = is_pair(TWO_OF_A_KIND_HAND)
@@ -171,6 +193,19 @@ class Tests(unittest.TestCase):
     def test_is_flush(self):
         result = is_flush(FLUSH_HAND)
         self.assertTrue(result)
+
+    def test_is_two_pair(self):
+        result = is_two_pair(TWO_PAIR_HAND)
+        self.assertTrue(result)
+
+    def test_is_two_pair_not(self):
+        result = is_two_pair(TWO_OF_A_KIND_HAND)
+        self.assertFalse(result)
+
+    def test_is_two_pair_not_2(self):
+        result = is_two_pair(FOUR_OF_A_KIND_HAND)
+        self.assertFalse(result)
+
 
 if __name__ == "__main__":
     unittest.main()
