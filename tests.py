@@ -141,7 +141,7 @@ class Tests(unittest.TestCase):
 
     def test_player(self):
         result = Player().betRequest(game_state=self.game_state)
-        self.assertEqual(result,320 - 80 + 20)
+        self.assertEqual(result,241)
 
 
     def test_check_pair(self):
@@ -159,14 +159,6 @@ class Tests(unittest.TestCase):
     def test_check_not_pair(self):
         result = is_pair(GARBAGE_HAND)
         self.assertFalse(result)
-
-    def test_rank_hand_nothing(self):
-        result = get_bet_amount(GARBAGE_HAND)
-        self.assertEqual(result, 0)
-
-    def test_rank_hand_pair(self):
-        result = get_bet_amount(TWO_OF_A_KIND_HAND)
-        self.assertEqual(result, 1)
 
     def test_is_four_of_a_kind(self):
         result = is_four_of_a_kind(FOUR_OF_A_KIND_HAND)
