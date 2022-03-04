@@ -11,12 +11,10 @@ class Player:
             in_action = game_state["in_action"]
             hole_cards = players[in_action]["hole_cards"]
             community_cards = game_state["community_cards"] or []
-            small_blind = game_state["small_blind"]
             hand = hole_cards + community_cards
+            current_call_amount = current_buy_in - players[in_action]["bet"]
 
-            bet_adjustment = get_hand_strength(hand) * small_blind
-
-            return current_buy_in - players[in_action]["bet"] + bet_adjustment
+            return get_bet_amount(hand, current_call_amount)
         except Exception as e:
             print(e, file=sys.stderr)
             return 0
@@ -25,17 +23,19 @@ class Player:
         pass
 
 
-def get_hand_strength(hand):
+def get_bet_amount(hand, current_call_amount):
+    result = current_call_amount
     if is_four_of_a_kind(hand):
-        return 10000
+        result += 10000
     elif is_flush(hand):
-        return 100
+        result += 100
     elif is_three_of_a_kind(hand):
-        return 10
+        result += 10
     elif is_pair(hand):
-        return 1
+        result += 1
     else:
-        return -1
+        result = 0
+    return result
 
 def is_pair(cards):
     ranks = [c["rank"] for c in cards]
