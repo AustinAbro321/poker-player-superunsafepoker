@@ -14,8 +14,14 @@ class Player:
             hand = hole_cards + community_cards
             current_call_amount = current_buy_in - players[in_action]["bet"]
             curr_round = game_state["round"]
+            # call to begin
             if curr_round == 0:
                 return current_call_amount
+            # fold if the first bet is high
+            if len(community_cards) == 0:
+                if current_call_amount > 50:
+                    return 0
+
             return get_bet_amount(hand, current_call_amount)
         except Exception as e:
             print(e, file=sys.stderr)
