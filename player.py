@@ -11,10 +11,10 @@ class Player:
             in_action = game_state["in_action"]
             hole_cards = players[in_action]["hole_cards"]
             community_cards = game_state["community_cards"] or []
-            big_blind = game_state["small_blind"] * 2
+            small_blind = game_state["small_blind"]
             hand = hole_cards + community_cards
 
-            bet_adjustment = get_hand_strength(hand) * big_blind
+            bet_adjustment = get_hand_strength(hand) * small_blind
 
             return current_buy_in - players[in_action]["bet"] + bet_adjustment
         except Exception as e:
@@ -35,7 +35,7 @@ def get_hand_strength(hand):
     elif is_pair(hand):
         return 1
     else:
-        return 0
+        return -1
 
 def is_pair(cards):
     ranks = [c["rank"] for c in cards]
