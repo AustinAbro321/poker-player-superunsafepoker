@@ -1,3 +1,7 @@
+import enum
+import http.client
+import urllib.request
+import json
 import sys
 
 
@@ -14,6 +18,10 @@ class Player:
             hand = hole_cards + community_cards
             current_call_amount = current_buy_in - players[in_action]["bet"]
             curr_round = game_state["round"]
+
+            if curr_round == 0:
+                return current_call_amount
+
             # fold if the first bet is high
             if len(community_cards) == 0:
                 if current_call_amount > 100:
@@ -28,44 +36,41 @@ class Player:
         pass
 
 
+class HandRanks(enum.Enum):
+    HighCard = 0
+    Pair = 1
+    TwoPairs = 2
+    ThreeOfAKind = 3
+    Straight = 4
+    Flush = 5
+    FullHouse = 6
+    FourOfAKind = 7
+    StraightFlush = 8
+
+
 def get_bet_amount(hand, current_call_amount):
-    result = current_call_amount
-    if is_four_of_a_kind(hand):
-        result += 10000
-    elif is_flush(hand):
-        result += 100
-    elif is_three_of_a_kind(hand):
-        result += 10
-    elif is_two_pair(hand):
-        result += 5
-    elif is_pair(hand):
-        result += 1
+    hand_rank = get_rank(hand)
+
+    raise_by = {
+        HandRanks.FourOfAKind: 10000,
+        HandRanks.Flush: 100,
+        HandRanks.ThreeOfAKind: 10,
+        HandRanks.TwoPairs: 5,
+        HandRanks.Pair: 1,
+    }.get(hand_rank)
+
+    if raise_by is None:
+        # fold
+        return 0
     else:
-        result = 0
-    return result
-
-def is_pair(cards):
-    ranks = [c["rank"] for c in cards]
-    return any(ranks.count(element) > 1 for element in ranks)
-
-def is_three_of_a_kind(cards):
-    ranks = [c["rank"] for c in cards]
-    return any(ranks.count(element) > 2 for element in ranks)
-
-def is_two_pair(cards):
-    ranks = [c["rank"] for c in cards]
-    set_of_ranks = list(set(ranks))
-    counts = { i : 0 for i in set(set_of_ranks) }
-    for r in set_of_ranks:
-        counts[r] = ranks.count(r)
-    return list(counts.values()).count(2) == 2
+        return current_call_amount + raise_by
 
 
-
-def is_four_of_a_kind(cards):
-    ranks = [c["rank"] for c in cards]
-    return any(ranks.count(element) > 3 for element in ranks)
-
-def is_flush(cards):
-    ranks = [c["suit"] for c in cards]
-    return any(ranks.count(element) >= 5 for element in ranks)
+def get_rank(cards) -> HandRanks:
+    response: http.client.HTTPResponse = urllib.request.urlopen(
+        "http://rainman.leanpoker.org/rank",
+        ("cards=" + json.dumps(cards)).encode("utf-8"),
+    )
+    response_body = json.loads(response.read().decode("utf-8"))
+    result = response_body["rank"]
+    return HandRanks(result)

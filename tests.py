@@ -1,7 +1,7 @@
 import json
 import unittest
 
-from player import Player, is_pair, is_three_of_a_kind, get_bet_amount, is_four_of_a_kind, is_flush, is_two_pair
+import player
 
 TWO_PAIR_HAND = [
     {
@@ -10,7 +10,7 @@ TWO_PAIR_HAND = [
     },
     {
         "rank": "A",
-        "suit": "hearts"
+        "suit": "spades"
     },
     {
         "rank": "8",
@@ -18,10 +18,10 @@ TWO_PAIR_HAND = [
     },
     {
         "rank": "8",
-        "suit": "hearts"
+        "suit": "spades"
     },
     {
-        "rank": "1",
+        "rank": "3",
         "suit": "hearts"
     }]
 
@@ -85,14 +85,13 @@ TWO_OF_A_KIND_HAND = [{
         "suit": "hearts"
     }]
 
-GARBAGE_HAND = [{
-    "rank": "4",
-    "suit": "spades"
-},
-    {
-        "rank": "A",
-        "suit": "hearts"
-    }]
+GARBAGE_HAND = [
+    {"rank": "K", "suit": "hearts"},
+    {"rank": "J", "suit": "hearts"},
+    {"rank": "8", "suit": "clubs"},
+    {"rank": "7", "suit": "diamonds"},
+    {"rank": "4", "suit": "spades"},
+]
 
 
 class Tests(unittest.TestCase):
@@ -162,49 +161,19 @@ class Tests(unittest.TestCase):
     }
       ''')
 
-    def test_player(self):
-        result = Player().betRequest(game_state=self.game_state)
-        self.assertEqual(result, 240)
+    def test__bet_request__first_round_should_check(self):
+        result = player.Player().betRequest(game_state=self.game_state)
+        self.assertEqual(240, result)
 
+
+    def test__bet_request__second_round_should_raise(self):
         self.game_state["round"] = 1
-        result = Player().betRequest(game_state=self.game_state)
-        self.assertEqual(result, 241)
+        result = player.Player().betRequest(game_state=self.game_state)
+        self.assertEqual(241, result)
 
-    def test_check_pair(self):
-        result = is_pair(TWO_OF_A_KIND_HAND)
-        self.assertTrue(result)
-
-    def test_is_not_three_of_a_kind(self):
-        result = is_three_of_a_kind(TWO_OF_A_KIND_HAND)
-        self.assertFalse(result)
-
-    def test_is_three_of_a_kind(self):
-        result = is_three_of_a_kind(THREE_OF_A_KIND_HAND)
-        self.assertTrue(result)
-
-    def test_check_not_pair(self):
-        result = is_pair(GARBAGE_HAND)
-        self.assertFalse(result)
-
-    def test_is_four_of_a_kind(self):
-        result = is_four_of_a_kind(FOUR_OF_A_KIND_HAND)
-        self.assertTrue(result)
-
-    def test_is_flush(self):
-        result = is_flush(FLUSH_HAND)
-        self.assertTrue(result)
-
-    def test_is_two_pair(self):
-        result = is_two_pair(TWO_PAIR_HAND)
-        self.assertTrue(result)
-
-    def test_is_two_pair_not(self):
-        result = is_two_pair(TWO_OF_A_KIND_HAND)
-        self.assertFalse(result)
-
-    def test_is_two_pair_not_2(self):
-        result = is_two_pair(FOUR_OF_A_KIND_HAND)
-        self.assertFalse(result)
+    def test_ranking(self):
+        self.assertEqual(player.HandRanks.HighCard, player.get_rank(GARBAGE_HAND))
+        self.assertEqual(player.HandRanks.TwoPairs, player.get_rank(TWO_PAIR_HAND))
 
 
 if __name__ == "__main__":
